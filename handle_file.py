@@ -1,4 +1,6 @@
 import os
+import logging
+
 
 def create_folder(data: dict[str, str]) -> None:
     output_dir = 'output'
