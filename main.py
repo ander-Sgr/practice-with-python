@@ -48,23 +48,35 @@ def load_data_from_json(json_data: str) -> List[Person]:
     return persons
 
 
+def process_data(data: List[Person]) -> dict[str, List[str]]:
+    logging.debug("Processing data users")
+    processed_data = {}
+    for person in data:
+        print(person.get_full_name(), person.get_location())
+        attribbuts = person.get_attributes()
+        country = attribbuts['country']
+        state = attribbuts['state']
+        if country not in processed_data:
+            processed_data[country] = []
+        if state not in processed_data:
+            processed_data[country].append(state)
+    return processed_data
+
+
 def main(args: List):
     parsed_args = parse_args(args)
     logging.debug("Initializing main function")
     config_level_logging(parsed_args.verbosity)
     response_data = get_random_users(parsed_args.count)
     data = load_data_from_json(response_data)
-    processed_data = {}
+    processed_data = process_data(data)
+    create_folder(processed_data)
     for person in data:
-        logging.warning("%s %s", person.get_full_name(), person.get_location())
+        full_name = person.get_full_name()
         attributes = person.get_attributes()
         country = attributes['country']
         state = attributes['state']
-        if country not in processed_data:
-            processed_data[country] = []
-        if state not in processed_data[country]:
-            processed_data[country].append(state)
-    create_folder(processed_data)
+        add_user_to_state_file(country, state, full_name)
 
 
 if __name__ == '__main__':

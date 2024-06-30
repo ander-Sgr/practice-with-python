@@ -1,8 +1,4 @@
 import os
-from typing import List
-
-from Person import Person
-
 
 def create_folder(data: dict[str, str]) -> None:
     output_dir = 'output'
@@ -17,4 +13,14 @@ def create_folder(data: dict[str, str]) -> None:
             state_file = os.path.join(country_dir, f"{state}.txt")
             if not os.path.exists(state_file):
                 with open(state_file, 'w') as f:
-                    f.write(f"Información sobre {state}\n")
+                    pass
+
+
+def add_user_to_state_file(country: str, state: str, full_name: str) -> None:
+    output_dir = 'output'
+    state_file = os.path.join(output_dir, country, f"{state}.txt")
+    if os.path.exists(state_file):
+        with open(state_file, 'a') as f:
+            f.write(f"{full_name}\n")
+    else:
+        logging.error(f"El archivo para {state} en {country} no existe.")
