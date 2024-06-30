@@ -1,11 +1,10 @@
-import base64
-import json
 import sys
 from typing import List
 from argparse import ArgumentParser, Namespace
 import requests
 import logging
 from Person import Person
+from handle_file import *
 
 
 def parse_args(args: List) -> Namespace:
@@ -55,8 +54,17 @@ def main(args: List):
     config_level_logging(parsed_args.verbosity)
     response_data = get_random_users(parsed_args.count)
     data = load_data_from_json(response_data)
+    processed_data = {}
     for person in data:
         logging.warning("%s %s", person.get_full_name(), person.get_location())
+        attributes = person.get_attributes()
+        country = attributes['country']
+        state = attributes['state']
+        if country not in processed_data:
+            processed_data[country] = []
+        if state not in processed_data[country]:
+            processed_data[country].append(state)
+    create_folder(processed_data)
 
 
 if __name__ == '__main__':

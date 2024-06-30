@@ -5,8 +5,11 @@ class Person:
         self.country = country
         self.state = state
 
-    def get_full_name(self):
+    def get_full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
 
-    def get_location(self):
+    def get_location(self) -> str:
         return f"{self.country}, {self.state}"
+
+    def get_attributes(self) -> dict[str, str]:
+        return self.__dict__
